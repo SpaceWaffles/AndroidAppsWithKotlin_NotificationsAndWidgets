@@ -1,5 +1,6 @@
 package com.jwhh.notekeeper
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
@@ -7,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import kotlinx.android.synthetic.main.item_note.view.*
 
 class NoteRecyclerAdapter(val context: Context) : RecyclerView.Adapter<NoteRecyclerAdapter.ViewHolder>()
 {
@@ -31,7 +34,8 @@ class NoteRecyclerAdapter(val context: Context) : RecyclerView.Adapter<NoteRecyc
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textCourse: TextView = itemView.findViewById<TextView>(R.id.textCourse)
         val textTitle: TextView = itemView.findViewById<TextView>(R.id.textTitle)
-        var currentPosition = 0;
+        var currentPosition = 0
+        private var longPressed = false
 
         init {
             itemView.setOnClickListener {
@@ -39,6 +43,47 @@ class NoteRecyclerAdapter(val context: Context) : RecyclerView.Adapter<NoteRecyc
                 intent.putExtra(NOTE_POSITION, currentPosition)
                 context.startActivity(intent)
             }
+
+            itemView.reminderButton.setOnClickListener {
+                if (longPressed) {
+                    longPressed = !longPressed
+                    resetReminderButton()
+                    Toast.makeText(
+                    itemView.context, "YAY", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            itemView.setOnLongClickListener {
+                longPressed = !longPressed
+                if (longPressed) {
+                    showReminderButton()
+                } else {
+                    resetReminderButton()
+                }
+                true
+            }
+        }
+
+        private fun showReminderButton() {
+            val animation = ObjectAnimator.ofFloat(itemView.clipboard, "rotationY", 0f, 90f)
+            animation.duration = 150
+            animation.start()
+
+            val animation3 = ObjectAnimator.ofFloat(itemView.reminderButton, "rotationY", 90f, 0f)
+            animation3.startDelay = 150
+            animation3.duration = 150
+            animation3.start()
+        }
+
+        private fun resetReminderButton() {
+            val animation = ObjectAnimator.ofFloat(itemView.reminderButton, "rotationY", 0f, 90f)
+            animation.duration = 150
+            animation.start()
+
+            val animation3 = ObjectAnimator.ofFloat(itemView.clipboard, "rotationY", 90f, 0f)
+            animation3.startDelay = 150
+            animation3.duration = 150
+            animation3.start()
         }
     }
 }

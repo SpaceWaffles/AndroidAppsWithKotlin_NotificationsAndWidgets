@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/clipboard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -38,7 +38,7 @@
                 android:text="TextView"
                 android:textAppearance="@style/CourseTitle"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toEndOf="@+id/clipboard"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -49,8 +49,21 @@
                 android:text="TextView"
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
                 app:layout_constraintEnd_toEndOf="@+id/textCourse"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toEndOf="@+id/clipboard"
                 app:layout_constraintTop_toBottomOf="@+id/textCourse" />
+
+            <ImageView
+              android:id="@+id/reminderButton"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="8dp"
+              android:layout_marginTop="8dp"
+              android:src="@drawable/ic_notifications_black_24dp"
+              android:tint="@color/lightGrey"
+              android:rotationY="90"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>
