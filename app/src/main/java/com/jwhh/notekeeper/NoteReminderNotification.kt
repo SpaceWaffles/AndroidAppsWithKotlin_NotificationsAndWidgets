@@ -45,20 +45,16 @@ object NoteReminderNotification {
    *
    * @see .cancel
    */
-  fun notify(context: Context,
-             exampleString: String, number: Int) {
+  fun notify(context: Context, titleText: String,
+             noteText: String, number: Int) {
     val res = context.resources
 
     // This image is used as the notification's large icon (thumbnail).
     // TODO: Remove this if your notification has no relevant thumbnail.
     val picture = BitmapFactory.decodeResource(res, R.drawable.example_picture)
 
-
-    val ticker = exampleString
-    val title = res.getString(
-        R.string.new_message_notification_title_template, exampleString)
-    val text = res.getString(
-        R.string.new_message_notification_placeholder_text_template, exampleString)
+    val intent = Intent(context, ItemsActivity::class.java)
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
     val builder = NotificationCompat.Builder(context, "reminders")
 
@@ -69,8 +65,8 @@ object NoteReminderNotification {
         // Set required fields, including the small icon, the
         // notification title, and text.
         .setSmallIcon(R.drawable.ic_stat_new_message)
-        .setContentTitle(title)
-        .setContentText(text)
+        .setContentTitle("Review Note")
+        .setContentText(noteText)
 
         // All fields below this line are optional.
 
@@ -80,14 +76,14 @@ object NoteReminderNotification {
 
         // Provide a large icon, shown with the notification in the
         // notification drawer on devices running Android 3.0 or later.
-        .setLargeIcon(picture)
+       // .setLargeIcon(picture)
 
         // Set ticker text (preview) information for this notification.
-        .setTicker(ticker)
+        .setTicker("Review Note")
 
         // Show a number. This is useful when stacking notifications of
         // a single type.
-        .setNumber(number)
+      //  .setNumber(number)
 
         // If this notification relates to a past or upcoming event, you
         // should set the relevant time information using the setWhen
@@ -104,7 +100,7 @@ object NoteReminderNotification {
             PendingIntent.getActivity(
                 context,
                 0,
-                Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com")),
+                intent,
                 PendingIntent.FLAG_UPDATE_CURRENT))
 
         // Automatically dismiss the notification when it is touched.
