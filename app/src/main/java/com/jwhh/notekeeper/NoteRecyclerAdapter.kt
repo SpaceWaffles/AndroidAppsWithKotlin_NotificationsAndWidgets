@@ -8,11 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import kotlinx.android.synthetic.main.item_note.view.*
 
-class NoteRecyclerAdapter(val context: Context) : RecyclerView.Adapter<NoteRecyclerAdapter.ViewHolder>()
-{
+class NoteRecyclerAdapter(val context: Context) : RecyclerView.Adapter<NoteRecyclerAdapter.ViewHolder>() {
     private val layoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,6 +37,10 @@ class NoteRecyclerAdapter(val context: Context) : RecyclerView.Adapter<NoteRecyc
 
         init {
             itemView.setOnClickListener {
+                if (longPressed) {
+                    longPressed = !longPressed
+                    resetReminderButton()
+                }
                 val intent = Intent(context, NoteActivity::class.java)
                 intent.putExtra(NOTE_POSITION, currentPosition)
                 context.startActivity(intent)
@@ -48,8 +50,7 @@ class NoteRecyclerAdapter(val context: Context) : RecyclerView.Adapter<NoteRecyc
                 if (longPressed) {
                     longPressed = !longPressed
                     resetReminderButton()
-                    Toast.makeText(
-                    itemView.context, "YAY", Toast.LENGTH_LONG).show()
+                    NoteReminderNotification.notify(itemView.context, "Reminder", 0)
                 }
             }
 
