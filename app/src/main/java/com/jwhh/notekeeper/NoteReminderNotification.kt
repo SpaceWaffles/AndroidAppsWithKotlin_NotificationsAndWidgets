@@ -46,12 +46,7 @@ object NoteReminderNotification {
    * @see .cancel
    */
   fun notify(context: Context, titleText: String,
-             noteText: String, number: Int) {
-    val res = context.resources
-
-    // This image is used as the notification's large icon (thumbnail).
-    // TODO: Remove this if your notification has no relevant thumbnail.
-    val picture = BitmapFactory.decodeResource(res, R.drawable.example_picture)
+             noteText: String) {
 
     val intent = Intent(context, ItemsActivity::class.java)
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -65,34 +60,15 @@ object NoteReminderNotification {
         // Set required fields, including the small icon, the
         // notification title, and text.
         .setSmallIcon(R.drawable.ic_stat_new_message)
-        .setContentTitle("Review Note")
+        .setContentTitle(titleText)
         .setContentText(noteText)
-
-        // All fields below this line are optional.
 
         // Use a default priority (recognized on devices running Android
         // 4.1 or later)
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        // Provide a large icon, shown with the notification in the
-        // notification drawer on devices running Android 3.0 or later.
-       // .setLargeIcon(picture)
-
         // Set ticker text (preview) information for this notification.
-        .setTicker("Review Note")
-
-        // Show a number. This is useful when stacking notifications of
-        // a single type.
-      //  .setNumber(number)
-
-        // If this notification relates to a past or upcoming event, you
-        // should set the relevant time information using the setWhen
-        // method below. If this call is omitted, the notification's
-        // timestamp will by set to the time at which it was shown.
-        // TODO: Call setWhen if this notification relates to a past or
-        // upcoming event. The sole argument to this method should be
-        // the notification timestamp in milliseconds.
-        //.setWhen(...)
+        .setTicker(titleText)
 
         // Set the pending intent to be initiated when the user touches
         // the notification.
@@ -114,11 +90,11 @@ object NoteReminderNotification {
       nm.createNotificationChannel(channel)
     }
 
-    notify(context, builder.build(), nm)
+    notify(builder.build(), nm)
   }
 
   @TargetApi(Build.VERSION_CODES.ECLAIR)
-  private fun notify(context: Context, notification: Notification, notificationManager: NotificationManager) {
+  private fun notify(notification: Notification, notificationManager: NotificationManager) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
       notificationManager.notify(NOTIFICATION_TAG, 0, notification)
     } else {

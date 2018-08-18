@@ -50,7 +50,7 @@ class NoteRecyclerAdapter(val context: Context) : RecyclerView.Adapter<NoteRecyc
                 if (longPressed) {
                     longPressed = !longPressed
                     resetReminderButton()
-                    NoteReminderNotification.notify(itemView.context, "Reminder", itemView.context.getString(R.string.reminder_body, textTitle.text), 0)
+                    NoteReminderNotification.notify(itemView.context, "Reminder", itemView.context.getString(R.string.reminder_body, textTitle.text))
                 }
             }
 
