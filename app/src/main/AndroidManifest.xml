@@ -24,7 +24,9 @@
     <activity
       android:name=".NoteActivity"
       android:label="Edit Note"
-      android:theme="@style/AppTheme.NoActionBar" />
+      android:theme="@style/AppTheme.NoActionBar"
+      android:parentActivityName=".ItemsActivity" />
+    <activity android:name=".NoteQuickViewActivity" />
   </application>
 
 </manifest>

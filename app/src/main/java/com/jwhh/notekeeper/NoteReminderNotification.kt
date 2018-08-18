@@ -1,10 +1,7 @@
 package com.jwhh.notekeeper
 
 import android.annotation.TargetApi
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -46,10 +43,20 @@ object NoteReminderNotification {
    * @see .cancel
    */
   fun notify(context: Context, titleText: String,
-             noteText: String) {
+             noteText: String, notePosition: Int) {
 
-    val intent = Intent(context, ItemsActivity::class.java)
-    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//    val intent = Intent(context, ItemsActivity::class.java)
+//    intent.putExtra(NOTE_POSITION, notePosition)
+//
+//    val pendingIntent = TaskStackBuilder.create(context)
+//        .addNextIntentWithParentStack(intent)
+//        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+
+    val intent = NoteQuickViewActivity.getIntent(context, notePosition)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+    val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
 
     val builder = NotificationCompat.Builder(context, "reminders")
 
@@ -72,12 +79,7 @@ object NoteReminderNotification {
 
         // Set the pending intent to be initiated when the user touches
         // the notification.
-        .setContentIntent(
-            PendingIntent.getActivity(
-                context,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT))
+        .setContentIntent(pendingIntent)
 
         // Automatically dismiss the notification when it is touched.
         .setAutoCancel(true)
