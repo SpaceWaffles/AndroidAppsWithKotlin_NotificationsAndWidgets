@@ -22,7 +22,10 @@ class NoteQuickViewActivity : AppCompatActivity() {
   }
 
   private fun initLayout() {
-
+    deleteButton.setOnClickListener {
+      DataManager.notes.removeAt(notePosition)
+      finish()
+    }
   }
 
   private fun setNote() {

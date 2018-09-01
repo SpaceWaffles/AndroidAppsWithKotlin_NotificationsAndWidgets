@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
-
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -64,9 +63,10 @@ class NoteActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_reminder -> {
-                NoteReminderNotification.notify(this,
+                ReminderNotification.notify(this,
                     "Reminder",
-                    getString(R.string.reminder_body, DataManager.notes[notePosition].title),
+                    getString(R.string.reminder_body,
+                        DataManager.notes[notePosition].title),
                     notePosition
                 )
                 true

@@ -26,7 +26,10 @@
       android:label="Edit Note"
       android:theme="@style/AppTheme.NoActionBar"
       android:parentActivityName=".ItemsActivity" />
-    <activity android:name=".NoteQuickViewActivity" />
+    <activity android:name=".NoteQuickViewActivity"
+      android:launchMode="singleTask"
+      android:taskAffinity=""
+      android:excludeFromRecents="true" />
   </application>
 
 </manifest>

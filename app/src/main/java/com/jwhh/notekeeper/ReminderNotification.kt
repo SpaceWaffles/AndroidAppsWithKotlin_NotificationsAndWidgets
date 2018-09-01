@@ -1,7 +1,9 @@
 package com.jwhh.notekeeper
 
 import android.annotation.TargetApi
-import android.app.*
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -12,53 +14,40 @@ import android.os.Build
 import android.support.v4.app.NotificationCompat
 
 /**
- * Helper class for showing and canceling new message
+ * Helper class for showing and canceling basic default
  * notifications.
  *
  *
  * This class makes heavy use of the [NotificationCompat.Builder] helper
  * class to create notifications in a backward-compatible way.
  */
-object NoteReminderNotification {
+object ReminderNotification {
   /**
    * The unique identifier for this type of notification.
    */
-  private val NOTIFICATION_TAG = "NewMessage"
+  private const val NOTIFICATION_TAG = "Reminder"
+
+  const val REMINDER_CHANNEL = "reminders"
 
   /**
    * Shows the notification, or updates a previously shown notification of
    * this type, with the given parameters.
    *
-   *
-   * TODO: Customize this method's arguments to present relevant content in
-   * the notification.
-   *
-   *
-   * TODO: Customize the contents of this method to tweak the behavior and
-   * presentation of new message notifications. Make
-   * sure to follow the
-   * [
- * Notification design guidelines](https://developer.android.com/design/patterns/notifications.html) when doing so.
-   *
-   * @see .cancel
    */
   fun notify(context: Context, titleText: String,
-             noteText: String, notePosition: Int) {
+             noteText: String, number: Int) {
 
-//    val intent = Intent(context, ItemsActivity::class.java)
-//    intent.putExtra(NOTE_POSITION, notePosition)
-//
-//    val pendingIntent = TaskStackBuilder.create(context)
-//        .addNextIntentWithParentStack(intent)
-//        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+    val shareIntent = PendingIntent.getActivity(context,
+        0,
+        Intent.createChooser(Intent(Intent.ACTION_SEND)
+            .setType("text/plain")
+            .putExtra(Intent.EXTRA_TEXT,
+                noteText
+            ),
+            "Share Note Reminder"),
+        PendingIntent.FLAG_UPDATE_CURRENT)
 
-    val intent = NoteQuickViewActivity.getIntent(context, notePosition)
-    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-    val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-
-    val builder = NotificationCompat.Builder(context, "reminders")
+    val builder = NotificationCompat.Builder(context, REMINDER_CHANNEL)
 
         // Set appropriate defaults for the notification light, sound,
         // and vibration.
@@ -66,9 +55,11 @@ object NoteReminderNotification {
 
         // Set required fields, including the small icon, the
         // notification title, and text.
-        .setSmallIcon(R.drawable.ic_stat_new_message)
+        .setSmallIcon(R.drawable.ic_stat_reminder)
         .setContentTitle(titleText)
         .setContentText(noteText)
+
+        // All fields below this line are optional.
 
         // Use a default priority (recognized on devices running Android
         // 4.1 or later)
@@ -79,28 +70,27 @@ object NoteReminderNotification {
 
         // Set the pending intent to be initiated when the user touches
         // the notification.
-        .setContentIntent(pendingIntent)
+        .setContentIntent(
+            PendingIntent.getActivity(
+                context,
+                0,
+                Intent(context, ItemsActivity::class.java),
+                PendingIntent.FLAG_UPDATE_CURRENT))
 
         // Automatically dismiss the notification when it is touched.
         .setAutoCancel(true)
 
-    val nm = context
-        .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      val channel = NotificationChannel("reminders", "Note Reminders", NotificationManager.IMPORTANCE_DEFAULT)
-      nm.createNotificationChannel(channel)
-    }
-
-    notify(builder.build(), nm)
+    notify(context, builder.build())
   }
 
   @TargetApi(Build.VERSION_CODES.ECLAIR)
-  private fun notify(notification: Notification, notificationManager: NotificationManager) {
+  private fun notify(context: Context, notification: Notification) {
+    val nm = context
+        .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-      notificationManager.notify(NOTIFICATION_TAG, 0, notification)
+      nm.notify(NOTIFICATION_TAG, 0, notification)
     } else {
-      notificationManager.notify(NOTIFICATION_TAG.hashCode(), notification)
+      nm.notify(NOTIFICATION_TAG.hashCode(), notification)
     }
   }
 
