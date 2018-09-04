@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -35,17 +36,14 @@ object ReminderNotification {
    *
    */
   fun notify(context: Context, titleText: String,
-             noteText: String, number: Int) {
+             noteText: String, notePosition: Int) {
 
-    val shareIntent = PendingIntent.getActivity(context,
-        0,
-        Intent.createChooser(Intent(Intent.ACTION_SEND)
-            .setType("text/plain")
-            .putExtra(Intent.EXTRA_TEXT,
-                noteText
-            ),
-            "Share Note Reminder"),
-        PendingIntent.FLAG_UPDATE_CURRENT)
+    val intent = Intent(context, NoteActivity::class.java)
+    intent.putExtra(NOTE_POSITION, notePosition)
+
+    val pendingIntent = TaskStackBuilder.create(context)
+        .addNextIntentWithParentStack(intent)
+        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
 
     val builder = NotificationCompat.Builder(context, REMINDER_CHANNEL)
 
@@ -70,12 +68,7 @@ object ReminderNotification {
 
         // Set the pending intent to be initiated when the user touches
         // the notification.
-        .setContentIntent(
-            PendingIntent.getActivity(
-                context,
-                0,
-                Intent(context, ItemsActivity::class.java),
-                PendingIntent.FLAG_UPDATE_CURRENT))
+        .setContentIntent(pendingIntent)
 
         // Automatically dismiss the notification when it is touched.
         .setAutoCancel(true)
