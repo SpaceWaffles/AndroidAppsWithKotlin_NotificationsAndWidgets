@@ -1,7 +1,10 @@
 package com.jwhh.notekeeper
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.RemoteInput
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
@@ -35,6 +38,15 @@ class NoteActivity : AppCompatActivity() {
             DataManager.notes.add(NoteInfo())
             notePosition = DataManager.notes.lastIndex
         }
+
+        val commentsAdapter = CommentRecyclerAdapter(this, DataManager.notes[notePosition])
+        commentsList.layoutManager = LinearLayoutManager(this)
+        commentsList.adapter = commentsAdapter
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        setIntent(intent)
+        notePosition = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -64,9 +76,7 @@ class NoteActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_reminder -> {
                 ReminderNotification.notify(this,
-                    "Reminder",
-                    getString(R.string.reminder_body,
-                        DataManager.notes[notePosition].title),
+                    DataManager.notes[notePosition],
                     notePosition
                 )
                 true

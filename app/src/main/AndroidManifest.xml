@@ -24,12 +24,18 @@
     <activity
       android:name=".NoteActivity"
       android:label="Edit Note"
-      android:theme="@style/AppTheme.NoActionBar"
-      android:parentActivityName=".ItemsActivity" />
-    <activity android:name=".NoteQuickViewActivity"
+      android:parentActivityName=".ItemsActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:name=".NoteQuickViewActivity"
+      android:excludeFromRecents="true"
       android:launchMode="singleTask"
-      android:taskAffinity=""
-      android:excludeFromRecents="true" />
+      android:taskAffinity="" />
+
+    <receiver
+      android:name=".NotificationBroadcastReceiver"
+      android:enabled="true"
+      android:exported="false"></receiver>
   </application>
 
 </manifest>
