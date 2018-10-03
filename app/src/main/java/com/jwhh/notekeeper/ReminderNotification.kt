@@ -58,7 +58,7 @@ object ReminderNotification {
         .setSmallIcon(R.drawable.ic_stat_reminder)
         .setContentTitle("Comments about " + note.title)
         .setLargeIcon(BitmapFactory
-            .decodeResource(context.resources, R.drawable.thrice2))
+            .decodeResource(context.resources, R.drawable.pluralsight_large))
 
         // All fields below this line are optional.
 
